@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@account/domain": ["libs/domain/src/index.ts"],
+      "@account/usecases": ["libs/usecases/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

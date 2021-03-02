@@ -13,12 +13,16 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/nest",
             "main": "apps/nest/src/main.ts",
             "tsConfig": "apps/nest/tsconfig.app.json",
-            "assets": ["apps/nest/src/assets"]
+            "assets": [
+              "apps/nest/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -43,14 +47,68 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/nest/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/nest/**/*.ts"
+            ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/nest"],
+          "outputs": [
+            "coverage/apps/nest"
+          ],
           "options": {
             "jestConfig": "apps/nest/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "domain": {
+      "root": "libs/domain",
+      "sourceRoot": "libs/domain/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/domain/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/domain"
+          ],
+          "options": {
+            "jestConfig": "libs/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "usecases": {
+      "root": "libs/usecases",
+      "sourceRoot": "libs/usecases/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/usecases/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/usecases"
+          ],
+          "options": {
+            "jestConfig": "libs/usecases/jest.config.js",
             "passWithNoTests": true
           }
         }

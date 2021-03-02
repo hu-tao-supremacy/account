@@ -7,3 +7,6 @@ env:
 	@cd $(dirname $0)
 	mkdir -p src/types
 	npx gen-env-types .env.local -o src/types/env.d.ts -e .
+
+nx-generate:
+	nx generate @nrwl/node:library --interactive=false
