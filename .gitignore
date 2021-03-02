@@ -524,3 +524,4 @@ $RECYCLE.BIN/
 /apis
 src/hts
 src/apis
+libs/domain/src/apis
