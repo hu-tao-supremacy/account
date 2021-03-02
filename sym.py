@@ -8,8 +8,8 @@ os.chdir(base)
 
 def sym():
     os.chdir(base)
-    src = "./src/apis"
-    dst = "../apis/gen/nest"
+    src = "./libs/domain/src/apis"
+    dst = "../../../apis/gen/nest"
     os.symlink(dst, src)
 
 sym()
