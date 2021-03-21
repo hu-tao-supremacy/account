@@ -8,7 +8,9 @@ import {
 import { OrganizationPermissionModel } from './organization-permission.model';
 import { OrganizationModel } from './organization.model';
 
-export class UserModel extends Model implements User {
+export class UserModel
+  extends Model
+  implements Omit<User, 'nickname' | 'chulaId'> {
   id!: number;
   firstName!: string;
   lastName!: string;
@@ -33,18 +35,6 @@ export class UserModel extends Model implements User {
           to: 'user_organization.organization_id',
         },
         to: 'organization.id',
-      },
-    },
-    permissions: {
-      relation: Model.ManyToManyRelation,
-      modelClass: OrganizationPermissionModel,
-      join: {
-        from: 'user.id',
-        through: {
-          from: 'user_permission.user_id',
-          to: 'user_permission.permission_id',
-        },
-        to: 'organization_permission.id',
       },
     },
   };
