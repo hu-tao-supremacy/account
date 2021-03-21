@@ -38,4 +38,8 @@ export class AccountController implements AccountServiceController {
   }: HasPermissionRequest): Promise<BoolValue> {
     return null;
   }
+
+  ping(): BoolValue {
+    return { value: true };
+  }
 }
