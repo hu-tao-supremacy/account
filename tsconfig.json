@@ -12,7 +12,8 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@internal/*": ["src/apis/hts/*"]
+      "@internal/*": ["src/apis/hts/*"],
+      "@google/*": ["src/apis/google/protobuf/*"]
     }
   }
 }
