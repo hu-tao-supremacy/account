@@ -63,7 +63,11 @@ export class AccountController implements AccountServiceController {
     });
   }
 
-  ping(): BoolValue {
-    return { value: true };
+  async ping(): Promise<BoolValue> {
+    if ((await this.accountService.ping()).length > 0) {
+      return { value: true };
+    }
+
+    return { value: false };
   }
 }

@@ -8,9 +8,9 @@ export class AccountService {
     @Inject(UserModel) private readonly userModel: typeof UserModel,
   ) {}
 
-  async ping(): Promise<any> {
+  async ping(): Promise<string> {
     let query = await this.userModel.knex().raw('SELECT VERSION()');
-    return query.rows[0].version;
+    return query.rows[0].version as string;
   }
 
   async userHasPermissionInOrganization(
