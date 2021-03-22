@@ -29,6 +29,7 @@
     "@types/pg": "^7.14.10",
     "@willsoto/nestjs-objection": "^4.0.2",
     "grpc": "^1.24.5",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
     "objection": "^2.2.14",
     "pg": "^8.5.1",
@@ -59,13 +60,19 @@
     "typescript": "^4.0.5"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
