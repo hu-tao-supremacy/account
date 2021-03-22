@@ -1,5 +1,5 @@
 declare namespace NodeJS {
-  export interface ProcessEnv {
+  interface ProcessEnv {
     POSTGRES_HOST: string;
     POSTGRES_USER: string;
     POSTGRES_PASSWORD: string;
@@ -9,5 +9,6 @@ declare namespace NodeJS {
     GRPC_PORT: string;
     HTS_SVC_ACCOUNT: string;
     HTS_SVC_FACILITY: string;
+    JWT_SECRET: string;
   }
 }
