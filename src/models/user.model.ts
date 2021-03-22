@@ -10,7 +10,7 @@ import { OrganizationModel } from './organization.model';
 
 export class UserModel
   extends Model
-  implements Omit<User, 'nickname' | 'chulaId'> {
+  implements Omit<User, 'nickname' | 'chulaId' | 'address' | 'profilePicture'> {
   id!: number;
   firstName!: string;
   lastName!: string;
@@ -19,6 +19,8 @@ export class UserModel
   isChulaStudent: boolean;
   chulaId: string;
   gender: Gender;
+  address?: string;
+  profilePicture?: string;
 
   permissions: OrganizationPermission[];
   organizations: Organization[];
