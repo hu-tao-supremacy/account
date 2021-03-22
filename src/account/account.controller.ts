@@ -2,12 +2,10 @@ import { Controller } from '@nestjs/common';
 import {
   AccountServiceController,
   AccountServiceControllerMethods,
-  ACCOUNT_SERVICE_NAME,
-  GenerateJWTResponse,
+  GenerateAuthTokenResponse,
   HasPermissionRequest,
   IsAuthenticatedRequest,
 } from '@internal/account/service';
-import { GrpcMethod } from '@nestjs/microservices';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
 import { User } from '@internal/common/common';
@@ -27,7 +25,7 @@ export class AccountController implements AccountServiceController {
     return null;
   }
 
-  async generateJWT(user: User): Promise<GenerateJWTResponse> {
+  async generateAuthToken(user: User): Promise<GenerateAuthTokenResponse> {
     return null;
   }
 
