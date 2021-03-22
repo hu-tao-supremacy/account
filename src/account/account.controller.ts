@@ -11,6 +11,7 @@ import { BoolValue } from '@google/wrappers';
 import { User } from '@internal/common/common';
 import { RpcException } from '@nestjs/microservices';
 import grpc from 'grpc';
+import jwt from 'jsonwebtoken';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -20,6 +21,16 @@ export class AccountController implements AccountServiceController {
   async isAuthenticated({
     accessToken,
   }: IsAuthenticatedRequest): Promise<BoolValue> {
+    try {
+      let decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+      return { value: true };
+    } catch (err) {
+      throw new RpcException({
+        code: grpc.status.UNAUTHENTICATED,
+        message: `Access token is invalid.`,
+      });
+    }
+
     return { value: true };
   }
 
