@@ -9,6 +9,8 @@ import {
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
 import { User } from '@internal/common/common';
+import { RpcException } from '@nestjs/microservices';
+import grpc from 'grpc';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -34,7 +36,20 @@ export class AccountController implements AccountServiceController {
     organizationId,
     permissionName,
   }: HasPermissionRequest): Promise<BoolValue> {
-    return null;
+    if (
+      await this.accountService.userHasPermissionInOrganization(
+        userId,
+        organizationId,
+        permissionName,
+      )
+    ) {
+      return { value: true };
+    }
+
+    throw new RpcException({
+      code: grpc.status.PERMISSION_DENIED,
+      message: `User does not have required permission to perform this action. (${permissionName})`,
+    });
   }
 
   ping(): BoolValue {

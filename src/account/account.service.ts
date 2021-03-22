@@ -18,11 +18,9 @@ export class AccountService {
     organizationId: number,
     permissionName: Permission,
   ): Promise<boolean> {
-    let permissions = await this.userModel
+    let query = await this.userModel
       .query()
-      .where({ id: userId })
-      .withGraphJoined('permissions');
-    console.log(permissions);
-    return true;
+      .where({ userId, organizationId, permissionName });
+    return query.length === 1;
   }
 }
