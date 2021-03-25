@@ -38,7 +38,7 @@ export class AccountController implements AccountServiceController {
     return null;
   }
 
-  async generateAuthToken(user: User): Promise<GenerateAuthTokenResponse> {
+  async generateAccessToken(user: User): Promise<GenerateAuthTokenResponse> {
     return null;
   }
 
