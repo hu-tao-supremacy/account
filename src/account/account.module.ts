@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { ObjectionModule } from '@willsoto/nestjs-objection';
 import { UserModel } from 'src/models/user.model';
 import { AccountController } from './account.controller';
@@ -10,6 +11,9 @@ console.log(
 
 @Module({
   imports: [
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+    }),
     ObjectionModule.register({
       config: {
         client: 'pg',
