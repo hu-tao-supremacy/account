@@ -1,4 +1,6 @@
+import { User } from '@gql/common/common';
 import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Permission } from 'src/apis/hts/common/common';
 import { UserModel } from 'src/models/user.model';
 
@@ -6,6 +8,7 @@ import { UserModel } from 'src/models/user.model';
 export class AccountService {
   constructor(
     @Inject(UserModel) private readonly userModel: typeof UserModel,
+    private readonly jwtService: JwtService,
   ) {}
 
   async ping(): Promise<string> {
@@ -22,5 +25,16 @@ export class AccountService {
       .query()
       .where({ userId, organizationId, permissionName });
     return query.length === 1;
+  }
+
+  async generateAccessToken(user: User): string {
+    const payload: any = {
+      userId: user.id,
+      organizationId: user.email,
+    };
+
+    return this.jwtService.sign(payload, {
+      expiresIn: '7d',
+    });
   }
 }
