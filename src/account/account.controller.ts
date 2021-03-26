@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import {
   AccountServiceController,
   AccountServiceControllerMethods,
-  GenerateAuthTokenResponse,
+  GenerateAccessTokenResponse,
   HasPermissionRequest,
   IsAuthenticatedRequest,
 } from '@internal/account/service';
@@ -38,7 +38,7 @@ export class AccountController implements AccountServiceController {
     return null;
   }
 
-  async generateAccessToken(user: User): Promise<GenerateAuthTokenResponse> {
+  async generateAccessToken(user: User): Promise<GenerateAccessTokenResponse> {
     return null;
   }
 
