@@ -20,7 +20,7 @@ export class UserModel
   chulaId: string;
   gender: Gender;
   address?: string;
-  profilePicture?: string;
+  profilePictureUrl?: string;
 
   permissions: OrganizationPermission[];
   organizations: Organization[];
