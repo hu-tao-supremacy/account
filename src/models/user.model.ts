@@ -10,7 +10,8 @@ import { OrganizationModel } from './organization.model';
 
 export class UserModel
   extends Model
-  implements Omit<User, 'nickname' | 'chulaId' | 'address' | 'profilePicture'> {
+  implements
+    Omit<User, 'nickname' | 'chulaId' | 'address' | 'profilePictureUrl'> {
   id!: number;
   firstName!: string;
   lastName!: string;
