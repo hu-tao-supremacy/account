@@ -2,12 +2,15 @@ import { User } from '@gql/common/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Permission } from 'src/apis/hts/common/common';
+import { UserPermissionModel } from 'src/models/user-permission.model';
 import { UserModel } from 'src/models/user.model';
 
 @Injectable()
 export class AccountService {
   constructor(
     @Inject(UserModel) private readonly userModel: typeof UserModel,
+    @Inject(UserPermissionModel)
+    private readonly userPermissionModel: typeof UserPermissionModel,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -21,7 +24,7 @@ export class AccountService {
     organizationId: number,
     permissionName: Permission,
   ): Promise<boolean> {
-    let query = await this.userModel
+    let query = await this.userPermissionModel
       .query()
       .where({ userId, organizationId, permissionName });
     return query.length === 1;

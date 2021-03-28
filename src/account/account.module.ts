@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ObjectionModule } from '@willsoto/nestjs-objection';
+import { UserPermissionModel } from 'src/models/user-permission.model';
 import { UserModel } from 'src/models/user.model';
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
@@ -27,7 +28,7 @@ console.log(
         },
       },
     }),
-    ObjectionModule.forFeature([UserModel]),
+    ObjectionModule.forFeature([UserPermissionModel]),
   ],
   controllers: [AccountController],
   providers: [AccountService],
