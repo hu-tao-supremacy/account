@@ -1,4 +1,4 @@
-import { User } from '@gql/common/common';
+import { AccessTokenPayload } from '@internal/account/service';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { from, Observable } from 'rxjs';
@@ -31,10 +31,9 @@ export class AccountService {
     return query.length === 1;
   }
 
-  async generateAccessToken(user: User): Promise<string> {
-    const payload: any = {
-      userId: user.id,
-      organizationId: user.email,
+  generateAccessToken(userId: number): string {
+    const payload: AccessTokenPayload = {
+      userId,
     };
 
     return this.jwtService.sign(payload, {
