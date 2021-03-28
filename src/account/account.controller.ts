@@ -8,10 +8,12 @@ import {
 } from '@internal/account/service';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
-import { User } from '@internal/common/common';
+import { GetObjectByIdRequest, User } from '@internal/common/common';
 import { RpcException } from '@nestjs/microservices';
 import grpc from 'grpc';
 import jwt from 'jsonwebtoken';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -69,5 +71,26 @@ export class AccountController implements AccountServiceController {
     }
 
     return { value: false };
+  }
+
+  getUserByChulaId({ id }: GetObjectByIdRequest): Observable<User> {
+    return this.accountService.getUserByChulaId(id).pipe(
+      map((userModel) => {
+        const user: User = {
+          id: userModel.id,
+          firstName: userModel.firstName,
+          lastName: userModel.lastName,
+          email: userModel.email,
+          nickname: { value: userModel.nickname },
+          chulaId: { value: userModel.chulaId },
+          isChulaStudent: userModel.isChulaStudent,
+          gender: userModel.gender,
+          address: { value: userModel.address },
+          profilePictureUrl: { value: userModel.profilePictureUrl },
+        };
+
+        return user;
+      }),
+    );
   }
 }

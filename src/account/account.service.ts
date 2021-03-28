@@ -1,6 +1,7 @@
 import { User } from '@gql/common/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { from, Observable } from 'rxjs';
 import { Permission } from 'src/apis/hts/common/common';
 import { UserPermissionModel } from 'src/models/user-permission.model';
 import { UserModel } from 'src/models/user.model';
@@ -39,5 +40,9 @@ export class AccountService {
     return this.jwtService.sign(payload, {
       expiresIn: '7d',
     });
+  }
+
+  getUserByChulaId(id: number): Observable<UserModel> {
+    return from(this.userModel.query().findOne({ chulaId: id }));
   }
 }
