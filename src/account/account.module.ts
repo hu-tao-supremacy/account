@@ -28,7 +28,7 @@ console.log(
         },
       },
     }),
-    ObjectionModule.forFeature([UserPermissionModel]),
+    ObjectionModule.forFeature([UserModel, UserPermissionModel]),
   ],
   controllers: [AccountController],
   providers: [AccountService],
