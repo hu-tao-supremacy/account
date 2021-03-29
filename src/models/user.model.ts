@@ -2,10 +2,9 @@ import { Model } from 'objection';
 import {
   Gender,
   Organization,
-  OrganizationPermission,
   User,
+  Permission,
 } from '../apis/hts/common/common';
-import { OrganizationPermissionModel } from './organization-permission.model';
 import { OrganizationModel } from './organization.model';
 
 export class UserModel
@@ -23,7 +22,7 @@ export class UserModel
   address?: string;
   profilePictureUrl?: string;
 
-  permissions: OrganizationPermission[];
+  permissions: Permission[];
   organizations: Organization[];
 
   static tableName = 'user';
