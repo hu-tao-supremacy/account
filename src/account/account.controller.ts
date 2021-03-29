@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import {
   AccountServiceController,
   AccountServiceControllerMethods,
+  GenerateAccessTokenRequest,
   GenerateAccessTokenResponse,
   HasPermissionRequest,
   IsAuthenticatedRequest,
@@ -40,8 +41,12 @@ export class AccountController implements AccountServiceController {
     return null;
   }
 
-  async generateAccessToken(user: User): Promise<GenerateAccessTokenResponse> {
-    return null;
+  generateAccessToken({
+    userId,
+  }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
+    return {
+      accessToken: this.accountService.generateAccessToken(userId),
+    };
   }
 
   async hasPermission({
