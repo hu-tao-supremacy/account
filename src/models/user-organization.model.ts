@@ -1,5 +1,5 @@
 import { Model } from 'objection';
-import { UserOrganization } from '../apis/hts/common/common';
+import { UserOrganization } from '@gql/common/common';
 
 export class UserOrganizationModel extends Model implements UserOrganization {
   id: number;
