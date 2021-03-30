@@ -3,7 +3,7 @@ import { Organization as OrganizationInterchangeFormat } from '@interchange-form
 import { BaseAdapter } from './base.adapter';
 
 export class OrganizationAdapter extends BaseAdapter<OrganizationInterchangeFormat, Organization> {
-  wrapperTypeFields = [
+  optionalFields = [
     'abbreviation',
     'advisor',
     'associatedFaculty',
