@@ -16,7 +16,8 @@
       "@internal/*": ["src/apis/hts/*"],
       "@gql/*": ["src/gql/hts/*"],
       "@google/*": ["src/apis/google/protobuf/*"],
-      "@entities/*": ["src/entities/*"]
+      "@entities/*": ["src/entities/*"],
+      "@adapters/*": ["src/adapters/*"]
     }
   }
 }
