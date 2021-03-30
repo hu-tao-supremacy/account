@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Permission } from 'src/apis/hts/common/common';
 import { Repository } from 'typeorm';
 
@@ -30,7 +30,9 @@ export class AccountService {
     organizationId: number,
     permissionName: Permission,
   ): Observable<boolean> {
-    return from(this.userOrganizationRepository.findOne({ where: { userId, organizationId } })).pipe(
+    return from(
+      this.userOrganizationRepository.findOne({ where: { userId, organizationId }, relations: ['permissions'] }),
+    ).pipe(
       map((userOrg) => userOrg.permissions),
       map((permissions) => permissions.findIndex((permission) => permission.permissionName === permissionName) !== -1),
     );
