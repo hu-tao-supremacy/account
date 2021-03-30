@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
+      "@interchange-format/*": ["src/apis/hts/*"],
       "@internal/*": ["src/apis/hts/*"],
       "@gql/*": ["src/gql/hts/*"],
       "@google/*": ["src/apis/google/protobuf/*"],
