@@ -7,6 +7,7 @@ import { Organization } from '@entities/organization.entity';
 import { User } from '@entities/user.entity';
 import { UserOrganization } from '@entities/user-organization.entity';
 import { UserPermission } from '@entities/user-permission.entity';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserPermission } from '@entities/user-permission.entity';
       database: process.env.POSTGRES_DB,
       entities: [User, Organization, UserOrganization, UserPermission],
       synchronize: false,
+      namingStrategy: new SnakeNamingStrategy(),
     }),
     AccountModule,
   ],
