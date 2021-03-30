@@ -1,8 +1,10 @@
+import { Organization } from '@entities/organization.entity';
+import { UserOrganization } from '@entities/user-organization.entity';
+import { UserPermission } from '@entities/user-permission.entity';
+import { User } from '@entities/user.entity';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { ObjectionModule } from '@willsoto/nestjs-objection';
-import { UserPermissionModel } from 'src/models/user-permission.model';
-import { UserModel } from 'src/models/user.model';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
 
@@ -15,20 +17,7 @@ console.log(
     JwtModule.register({
       secret: process.env.JWT_SECRET,
     }),
-    ObjectionModule.register({
-      config: {
-        client: 'pg',
-        useNullAsDefault: true,
-        connection: {
-          host: process.env.POSTGRES_HOST,
-          user: process.env.POSTGRES_USER,
-          password: process.env.POSTGRES_PASSWORD,
-          port: Number(process.env.POSTGRES_PORT),
-          database: process.env.POSTGRES_DB,
-        },
-      },
-    }),
-    ObjectionModule.forFeature([UserModel, UserPermissionModel]),
+    TypeOrmModule.forFeature([User, Organization, UserOrganization, UserPermission]),
   ],
   controllers: [AccountController],
   providers: [AccountService],
