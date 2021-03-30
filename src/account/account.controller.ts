@@ -9,23 +9,22 @@ import {
 } from '@internal/account/service';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
-import { GetObjectByIdRequest, User } from '@internal/common/common';
+import { GetObjectByIdRequest, User as UserInterchangeFormat } from '@interchange-format/common/common';
 import { RpcException } from '@nestjs/microservices';
 import grpc from 'grpc';
 import jwt from 'jsonwebtoken';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UserAdapter } from '@adapters/user.adapter';
 
 @Controller('account')
 @AccountServiceControllerMethods()
 export class AccountController implements AccountServiceController {
   constructor(private readonly accountService: AccountService) {}
 
-  async isAuthenticated({
-    accessToken,
-  }: IsAuthenticatedRequest): Promise<BoolValue> {
+  async isAuthenticated({ accessToken }: IsAuthenticatedRequest): Promise<BoolValue> {
     try {
-      let decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+      jwt.verify(accessToken, process.env.JWT_SECRET);
       return { value: true };
     } catch (err) {
       throw new RpcException({
@@ -33,34 +32,20 @@ export class AccountController implements AccountServiceController {
         message: `Access token is invalid.`,
       });
     }
-
-    return { value: true };
   }
 
-  async updateAccountInfo(user: User): Promise<User> {
+  async updateAccountInfo(user: UserInterchangeFormat): Promise<UserInterchangeFormat> {
     return null;
   }
 
-  generateAccessToken({
-    userId,
-  }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
+  generateAccessToken({ userId }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
     return {
       accessToken: this.accountService.generateAccessToken(userId),
     };
   }
 
-  async hasPermission({
-    userId,
-    organizationId,
-    permissionName,
-  }: HasPermissionRequest): Promise<BoolValue> {
-    if (
-      await this.accountService.userHasPermissionInOrganization(
-        userId,
-        organizationId,
-        permissionName,
-      )
-    ) {
+  async hasPermission({ userId, organizationId, permissionName }: HasPermissionRequest): Promise<BoolValue> {
+    if (await this.accountService.userHasPermissionInOrganization(userId, organizationId, permissionName).toPromise()) {
       return { value: true };
     }
 
@@ -70,32 +55,11 @@ export class AccountController implements AccountServiceController {
     });
   }
 
-  async ping(): Promise<BoolValue> {
-    if ((await this.accountService.ping()).length > 0) {
-      return { value: true };
-    }
-
-    return { value: false };
+  ping(): BoolValue {
+    return { value: this.accountService.ping() };
   }
 
-  getUserByChulaId({ id }: GetObjectByIdRequest): Observable<User> {
-    return this.accountService.getUserByChulaId(id).pipe(
-      map((userModel) => {
-        const user: User = {
-          id: userModel.id,
-          firstName: userModel.firstName,
-          lastName: userModel.lastName,
-          email: userModel.email,
-          nickname: { value: userModel.nickname },
-          chulaId: { value: userModel.chulaId },
-          isChulaStudent: userModel.isChulaStudent,
-          gender: userModel.gender,
-          address: { value: userModel.address },
-          profilePictureUrl: { value: userModel.profilePictureUrl },
-        };
-
-        return user;
-      }),
-    );
+  getUserByChulaId({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
+    return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 }
