@@ -1,9 +1,9 @@
 import { Organization } from '@entities/organization.entity';
-import { Organization as OrganizationIF } from '@interchange-format/common/common';
+import { Organization as OrganizationInterchangeFormat } from '@interchange-format/common/common';
 import { BaseAdapter } from './base.adapter';
 
 export class OrganizationAdapter extends BaseAdapter<
-  OrganizationIF,
+  OrganizationInterchangeFormat,
   Organization
 > {
   wrapperTypeFields = [
