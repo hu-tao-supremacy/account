@@ -1,3 +1,4 @@
+import { Permission } from "@gql/common/common";
 import {
   Column,
   Entity,
@@ -20,5 +21,5 @@ export class UserPermission {
   userOrganization: UserOrganization;
 
   @Column()
-  permissionName: string;
+  permissionName: Permission;
 }
