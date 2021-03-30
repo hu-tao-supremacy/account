@@ -6,7 +6,7 @@ import {
   GenerateAccessTokenResponse,
   HasPermissionRequest,
   IsAuthenticatedRequest,
-} from '@internal/account/service';
+} from '@interchange-format/account/service';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
 import { GetObjectByIdRequest, User as UserInterchangeFormat } from '@interchange-format/common/common';
