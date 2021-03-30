@@ -30,9 +30,9 @@ export class AccountService {
     organizationId: number,
     permissionName: Permission,
   ): Observable<boolean> {
-    return from(this.userPermission.findAndCount({ where: { userId, organizationId, permissionName } })).pipe(
-      map((project) => project[1]),
-      map((count) => count === 1),
+    return from(this.userOrganizationRepository.findOne({ where: { userId, organizationId } })).pipe(
+      map((userOrg) => userOrg.permissions),
+      map((permissions) => permissions.findIndex((permission) => permission.permissionName === permissionName) !== -1),
     );
   }
 
