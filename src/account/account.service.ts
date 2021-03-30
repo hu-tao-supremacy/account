@@ -21,7 +21,7 @@ export class AccountService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async ping(): boolean {
+  ping(): boolean {
     return true;
   }
 
