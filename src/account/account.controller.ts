@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Request, Get, Param } from '@nestjs/common';
 import {
   AccountServiceController,
   AccountServiceControllerMethods,
@@ -21,7 +21,7 @@ import { Permission } from '@gql/common/common';
 @Controller('account')
 @AccountServiceControllerMethods()
 export class AccountController implements AccountServiceController {
-  constructor(private readonly accountService: AccountService) { }
+  constructor(private readonly accountService: AccountService) {}
 
   async isAuthenticated({ accessToken }: IsAuthenticatedRequest): Promise<BoolValue> {
     try {
@@ -36,14 +36,26 @@ export class AccountController implements AccountServiceController {
   }
 
   updateAccountInfo(user: UserInterchangeFormat): Observable<UserInterchangeFormat> {
-    const userEntity = new UserAdapter().toEntity(user)
-    return this.accountService.updateUser(userEntity).pipe(map(user => new UserAdapter().toInterchangeFormat(user)));
+    const userEntity = new UserAdapter().toEntity(user);
+    return this.accountService.updateUser(userEntity).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 
   generateAccessToken({ userId }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
     return {
       accessToken: this.accountService.generateAccessToken(userId),
     };
+  }
+
+  @Get('getAccessToken/:userId')
+  getAccessToken(@Param('userId') userId: number) {
+    return this.generateAccessToken({ userId });
+  }
+
+  @Get('getIsAuthenticated')
+  async getIsAuthenticated(@Request() request: Request) {
+    const accessToken = request.headers.get('Authorization').split('Bearer ')[1];
+    const isAuthenticated = await this.isAuthenticated({ accessToken });
+    return isAuthenticated.value;
   }
 
   async hasPermission({ userId, organizationId, permissionName }: HasPermissionRequest): Promise<BoolValue> {
@@ -53,7 +65,7 @@ export class AccountController implements AccountServiceController {
       ) {
         return { value: true };
       }
-    } catch (_) { }
+    } catch (_) {}
 
     throw new RpcException({
       code: status.PERMISSION_DENIED,
@@ -79,6 +91,6 @@ export class AccountController implements AccountServiceController {
   }
 
   getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
-    return this.accountService.getUserById(id).pipe(map(user => new UserAdapter().toInterchangeFormat(user)))
+    return this.accountService.getUserById(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 }
