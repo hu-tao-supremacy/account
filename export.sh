@@ -5,3 +5,4 @@ export POSTGRES_DB=hts
 export POSTGRES_PORT=5432
 export GRPC_HOST=localhost
 export GRPC_PORT=50055
+export JWT_SECRET=hu-tao-mains
