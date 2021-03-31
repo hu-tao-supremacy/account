@@ -19,6 +19,7 @@ import { UserAdapter } from '@adapters/user.adapter';
 import { Permission } from '@gql/common/common';
 import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { AccessTokenPayload } from '@gql/account/service'
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -60,6 +61,13 @@ export class AccountController implements AccountServiceController {
     return isAuthenticated.value;
   }
 
+  @Get('currentUser')
+  async getCurrentUser(@Request() request: ExpressRequest) {
+    const accessToken = request.headers.authorization.split('Bearer ')[1];
+    const decoded = this.jwtService.decode(accessToken) as AccessTokenPayload
+    return this.getUserById({ id: decoded.userId })
+  }
+
   async hasPermission({ userId, organizationId, permissionName }: HasPermissionRequest): Promise<BoolValue> {
     try {
       if (
@@ -93,6 +101,6 @@ export class AccountController implements AccountServiceController {
   }
 
   getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
-    return this.accountService.getUserById(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService.getUserById(Number(id.toString())).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 }
