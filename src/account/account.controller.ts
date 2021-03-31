@@ -17,15 +17,17 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserAdapter } from '@adapters/user.adapter';
 import { Permission } from '@gql/common/common';
+import { Request as ExpressRequest } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('account')
 @AccountServiceControllerMethods()
 export class AccountController implements AccountServiceController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountService: AccountService, private readonly jwtService: JwtService) { }
 
   async isAuthenticated({ accessToken }: IsAuthenticatedRequest): Promise<BoolValue> {
     try {
-      jwt.verify(accessToken, process.env.JWT_SECRET);
+      this.jwtService.verify(accessToken);
       return { value: true };
     } catch (err) {
       throw new RpcException({
@@ -52,8 +54,8 @@ export class AccountController implements AccountServiceController {
   }
 
   @Get('getIsAuthenticated')
-  async getIsAuthenticated(@Request() request: Request) {
-    const accessToken = request.headers.get('Authorization').split('Bearer ')[1];
+  async getIsAuthenticated(@Request() request: ExpressRequest) {
+    const accessToken = request.headers.authorization.split('Bearer ')[1];
     const isAuthenticated = await this.isAuthenticated({ accessToken });
     return isAuthenticated.value;
   }
@@ -65,7 +67,7 @@ export class AccountController implements AccountServiceController {
       ) {
         return { value: true };
       }
-    } catch (_) {}
+    } catch (_) { }
 
     throw new RpcException({
       code: status.PERMISSION_DENIED,
