@@ -19,12 +19,13 @@ import { UserAdapter } from '@adapters/user.adapter';
 import { Permission } from '@gql/common/common';
 import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenPayload } from '@gql/account/service'
+import { AccessTokenPayload } from '@gql/account/service';
+import { isLong } from 'long';
 
 @Controller('account')
 @AccountServiceControllerMethods()
 export class AccountController implements AccountServiceController {
-  constructor(private readonly accountService: AccountService, private readonly jwtService: JwtService) { }
+  constructor(private readonly accountService: AccountService, private readonly jwtService: JwtService) {}
 
   async isAuthenticated({ accessToken }: IsAuthenticatedRequest): Promise<BoolValue> {
     try {
@@ -64,18 +65,21 @@ export class AccountController implements AccountServiceController {
   @Get('currentUser')
   async getCurrentUser(@Request() request: ExpressRequest) {
     const accessToken = request.headers.authorization.split('Bearer ')[1];
-    const decoded = this.jwtService.decode(accessToken) as AccessTokenPayload
-    return this.getUserById({ id: decoded.userId })
+    const decoded = this.jwtService.decode(accessToken) as AccessTokenPayload;
+    return this.getUserById({ id: decoded.userId });
   }
 
   async hasPermission({ userId, organizationId, permissionName }: HasPermissionRequest): Promise<BoolValue> {
+    const _userId = isLong(userId) ? Number(userId.toString()) : userId;
+    const _organizationId = isLong(organizationId) ? Number(organizationId.toString()) : organizationId;
+
     try {
       if (
-        await this.accountService.userHasPermissionInOrganization(userId, organizationId, permissionName).toPromise()
+        await this.accountService.userHasPermissionInOrganization(_userId, _organizationId, permissionName).toPromise()
       ) {
         return { value: true };
       }
-    } catch (_) { }
+    } catch (_) {}
 
     throw new RpcException({
       code: status.PERMISSION_DENIED,
@@ -101,6 +105,8 @@ export class AccountController implements AccountServiceController {
   }
 
   getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
-    return this.accountService.getUserById(Number(id.toString())).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService
+      .getUserById(Number(id.toString()))
+      .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 }
