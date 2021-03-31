@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Permission } from 'src/apis/hts/common/common';
 import { Repository } from 'typeorm';
 
@@ -50,5 +50,15 @@ export class AccountService {
 
   getUserByChulaId(id: number): Observable<User> {
     return from(this.userRepository.findOne({ where: { chulaId: id } }));
+  }
+
+  getUserById(id: number): Observable<User> {
+    return from(this.userRepository.findOne(id));
+  }
+
+  updateUser(user: User): Observable<User> {
+    return from(this.userRepository.update({ id: user.id }, user)).pipe(
+      switchMap((_) => from(this.userRepository.findOne(user.id))),
+    );
   }
 }

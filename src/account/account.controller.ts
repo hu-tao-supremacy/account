@@ -21,7 +21,7 @@ import { Permission } from '@gql/common/common';
 @Controller('account')
 @AccountServiceControllerMethods()
 export class AccountController implements AccountServiceController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountService: AccountService) { }
 
   async isAuthenticated({ accessToken }: IsAuthenticatedRequest): Promise<BoolValue> {
     try {
@@ -35,8 +35,9 @@ export class AccountController implements AccountServiceController {
     }
   }
 
-  async updateAccountInfo(user: UserInterchangeFormat): Promise<UserInterchangeFormat> {
-    return null;
+  updateAccountInfo(user: UserInterchangeFormat): Observable<UserInterchangeFormat> {
+    const userEntity = new UserAdapter().toEntity(user)
+    return this.accountService.updateUser(userEntity).pipe(map(user => new UserAdapter().toInterchangeFormat(user)));
   }
 
   generateAccessToken({ userId }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
@@ -52,7 +53,7 @@ export class AccountController implements AccountServiceController {
       ) {
         return { value: true };
       }
-    } catch (_) {}
+    } catch (_) { }
 
     throw new RpcException({
       code: status.PERMISSION_DENIED,
@@ -75,5 +76,9 @@ export class AccountController implements AccountServiceController {
 
   getUserByChulaId({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
     return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+  }
+
+  getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
+    return this.accountService.getUserById(id).pipe(map(user => new UserAdapter().toInterchangeFormat(user)))
   }
 }
