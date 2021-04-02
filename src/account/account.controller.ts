@@ -73,6 +73,9 @@ export class AccountController implements AccountServiceController {
     const _userId = isLong(userId) ? Number(userId.toString()) : userId;
     const _organizationId = isLong(organizationId) ? Number(organizationId.toString()) : organizationId;
 
+    console.log(userId, organizationId, permissionName);
+    console.log(_userId, _organizationId, permissionName);
+
     try {
       if (
         await this.accountService.userHasPermissionInOrganization(_userId, _organizationId, permissionName).toPromise()
