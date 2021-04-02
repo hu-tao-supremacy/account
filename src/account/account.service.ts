@@ -33,7 +33,7 @@ export class AccountService {
     return from(
       this.userOrganizationRepository.findOne({ where: { userId, organizationId }, relations: ['permissions'] }),
     ).pipe(
-      tap((userOrg) => console.log(userOrg)),
+      tap((userOrg) => console.log(userOrg, permissionName)),
       map((userOrg) => userOrg.permissions),
       map((permissions) => permissions.findIndex((permission) => permission.permissionName === permissionName) !== -1),
     );
