@@ -82,7 +82,9 @@ export class AccountController implements AccountServiceController {
       ) {
         return { value: true };
       }
-    } catch (_) {}
+    } catch (e) {
+      console.error(e)
+    }
 
     throw new RpcException({
       code: status.PERMISSION_DENIED,
