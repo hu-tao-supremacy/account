@@ -35,7 +35,7 @@ export class AccountService {
     ).pipe(
       tap((userOrg) => console.log(userOrg, permissionName)),
       map((userOrg) => userOrg.permissions),
-      map((permissions) => permissions.findIndex((permission) => permission.permissionName === permissionName) !== -1),
+      map((permissions) => permissions.findIndex((permission) => permission.permissionName == permissionName) !== -1),
     );
   }
 
