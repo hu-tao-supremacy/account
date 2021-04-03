@@ -30,6 +30,9 @@ export class User {
   @Column()
   isChulaStudent: boolean;
 
+  @Column({ default: false })
+  didSetup: boolean = false;
+
   @Column("enum", { enum: ["M", "F", "NS"] })
   gender: string;
 }
