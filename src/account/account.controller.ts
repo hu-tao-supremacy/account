@@ -10,6 +10,7 @@ import {
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
 import { GetObjectByIdRequest, User as UserInterchangeFormat } from '@interchange-format/common/common';
+import { CreateUserRequest } from '@interchange-format/account/service';
 import { RpcException } from '@nestjs/microservices';
 import { status } from 'grpc';
 import jwt from 'jsonwebtoken';
@@ -83,7 +84,7 @@ export class AccountController implements AccountServiceController {
         return { value: true };
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
 
     throw new RpcException({
@@ -107,6 +108,12 @@ export class AccountController implements AccountServiceController {
 
   getUserByChulaId({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
     return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+  }
+
+  createUser(request: CreateUserRequest): Observable<UserInterchangeFormat> {
+    return this.accountService
+      .createUser(request.firstName, request.lastName, request.chulaId)
+      .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 
   getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {

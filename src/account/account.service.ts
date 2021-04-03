@@ -21,7 +21,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   ping(): boolean {
     return true;
@@ -52,10 +52,26 @@ export class AccountService {
   }
 
   getUserByChulaId(id: number): Observable<User> {
-    return from(this.userRepository.findOne({ where: { chulaId: id } })).pipe(catchError(error => {
-      console.log(error)
-      throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for Chula ID ${id}.` })
-    }));
+    return from(this.userRepository.findOne({ where: { chulaId: id } })).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for Chula ID ${id}.` });
+      }),
+    );
+  }
+
+  createUser(firstName: string, lastName: string, chulaId: string): Observable<User> {
+    const user = new User();
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.chulaId = chulaId;
+    user.gender = 'NS';
+    return from(this.userRepository.save(user)).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.INTERNAL });
+      }),
+    );
   }
 
   getUserById(id: number): Observable<User> {
