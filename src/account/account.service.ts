@@ -5,9 +5,11 @@ import { User } from '@entities/user.entity';
 import { AccessTokenPayload } from '@internal/account/service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
+import { status } from 'grpc';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Permission } from 'src/apis/hts/common/common';
 import { Repository } from 'typeorm';
 
@@ -19,7 +21,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   ping(): boolean {
     return true;
@@ -50,7 +52,10 @@ export class AccountService {
   }
 
   getUserByChulaId(id: number): Observable<User> {
-    return from(this.userRepository.findOne({ where: { chulaId: id } }));
+    return from(this.userRepository.findOne({ where: { chulaId: id } })).pipe(catchError(error => {
+      console.log(error)
+      throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for Chula ID ${id}.` })
+    }));
   }
 
   getUserById(id: number): Observable<User> {
