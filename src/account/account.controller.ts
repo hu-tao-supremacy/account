@@ -4,6 +4,7 @@ import {
   AccountServiceControllerMethods,
   GenerateAccessTokenRequest,
   GenerateAccessTokenResponse,
+  GetUserByChulaIdRequest,
   HasPermissionRequest,
   IsAuthenticatedRequest,
 } from '@interchange-format/account/service';
@@ -106,13 +107,13 @@ export class AccountController implements AccountServiceController {
     return { value: this.accountService.ping() };
   }
 
-  getUserByChulaId({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
+  getUserByChulaId({ id }: GetUserByChulaIdRequest): Observable<UserInterchangeFormat> {
     return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 
   createUser(request: CreateUserRequest): Observable<UserInterchangeFormat> {
     return this.accountService
-      .createUser(request.firstName, request.lastName, request.chulaId)
+      .createUser(request.firstName, request.lastName, request.chulaId, request.email, request.isChulaStudent)
       .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
   }
 

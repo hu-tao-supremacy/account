@@ -51,7 +51,7 @@ export class AccountService {
     });
   }
 
-  getUserByChulaId(id: number): Observable<User> {
+  getUserByChulaId(id: string): Observable<User> {
     return from(this.userRepository.findOneOrFail({ where: { chulaId: id } })).pipe(
       catchError((error) => {
         console.log(error);
@@ -60,11 +60,19 @@ export class AccountService {
     );
   }
 
-  createUser(firstName: string, lastName: string, chulaId: string): Observable<User> {
+  createUser(
+    firstName: string,
+    lastName: string,
+    chulaId: string,
+    email: string,
+    isChulaStudent: boolean,
+  ): Observable<User> {
     const user = new User();
     user.firstName = firstName;
     user.lastName = lastName;
     user.chulaId = chulaId;
+    user.email = email;
+    user.isChulaStudent = isChulaStudent;
     user.gender = 'NS';
     return from(this.userRepository.save(user)).pipe(
       catchError((error) => {
