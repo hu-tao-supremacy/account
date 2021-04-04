@@ -52,7 +52,7 @@ export class AccountService {
   }
 
   getUserByChulaId(id: number): Observable<User> {
-    return from(this.userRepository.findOne({ where: { chulaId: id } })).pipe(
+    return from(this.userRepository.findOneOrFail({ where: { chulaId: id } })).pipe(
       catchError((error) => {
         console.log(error);
         throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for Chula ID ${id}.` });
@@ -75,7 +75,7 @@ export class AccountService {
   }
 
   getUserById(id: number): Observable<User> {
-    return from(this.userRepository.findOne(id));
+    return from(this.userRepository.findOneOrFail(id));
   }
 
   updateUser(user: User): Observable<User> {
