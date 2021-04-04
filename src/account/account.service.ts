@@ -83,7 +83,12 @@ export class AccountService {
   }
 
   getUserById(id: number): Observable<User> {
-    return from(this.userRepository.findOneOrFail(id));
+    return from(this.userRepository.findOneOrFail(id)).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for ID ${id}.` });
+      }),
+    );
   }
 
   updateUser(user: User): Observable<User> {
