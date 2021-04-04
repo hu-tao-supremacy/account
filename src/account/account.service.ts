@@ -21,7 +21,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   ping(): boolean {
     return true;
@@ -92,6 +92,7 @@ export class AccountService {
   }
 
   updateUser(user: User): Observable<User> {
+    user.didSetup = true
     return from(this.userRepository.update({ id: user.id }, user)).pipe(
       switchMap((_) => from(this.userRepository.findOne(user.id))),
     );
