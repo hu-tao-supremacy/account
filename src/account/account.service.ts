@@ -167,16 +167,9 @@ export class AccountService {
   }
 
   removePermissions(userOrganizationId: number, permissions: Permission[]): Observable<boolean> {
-    return from(
-      this.userPermissionRepository.remove(
-        permissions.map((permission) => {
-          const userPermission = new UserPermission();
-          userPermission.userOrganizationId = userOrganizationId;
-          userPermission.permissionName = permission;
-          return userPermission;
-        }),
-      ),
-    ).pipe(
+    const findOptions = { where: permissions.map((permissionName) => ({ userOrganizationId, permissionName })) };
+    return from(this.userPermissionRepository.find(findOptions)).pipe(
+      switchMap((entities) => this.userPermissionRepository.remove(entities)),
       catchError((error) => {
         console.log(error);
         throw new RpcException({ code: status.INTERNAL });
