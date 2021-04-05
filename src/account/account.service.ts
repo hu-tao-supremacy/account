@@ -19,9 +19,9 @@ export class AccountService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Organization) private organizationRepository: Repository<Organization>,
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
-    @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
+    @InjectRepository(UserPermission) private userPermissionRepository: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   ping(): boolean {
     return true;
@@ -145,5 +145,38 @@ export class AccountService {
       default:
         return [];
     }
+  }
+
+  assignPermissions(userOrganizationId: number, permissions: Permission[]): Observable<boolean> {
+    return from(
+      this.userPermissionRepository.save(
+        permissions.map((permission) => {
+          const userPermission = new UserPermission();
+          userPermission.userOrganizationId = userOrganizationId;
+          userPermission.permissionName = permission;
+          return userPermission;
+        }),
+      ),
+    ).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.INTERNAL });
+      }),
+      map((_) => true),
+    );
+  }
+
+  assignRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
+    return from(this.userOrganizationRepository.findOneOrFail({ userId, organizationId })).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({
+          code: status.NOT_FOUND,
+          message: `Did not find any user_organization for (user ID: ${userId}, organization ID: ${organizationId}).`,
+        });
+      }),
+      map((userOrg) => userOrg.id),
+      switchMap((userOrgId) => this.assignPermissions(userOrgId, this.getPermissionsFromRole(role))),
+    );
   }
 }
