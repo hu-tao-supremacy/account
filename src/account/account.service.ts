@@ -2,7 +2,8 @@ import { Organization } from '@entities/organization.entity';
 import { UserOrganization } from '@entities/user-organization.entity';
 import { UserPermission } from '@entities/user-permission.entity';
 import { User } from '@entities/user.entity';
-import { AccessTokenPayload } from '@internal/account/service';
+import { AccessTokenPayload, Role } from '@internal/account/service';
+import { Permission } from '@internal/common/common';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
@@ -10,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { status } from 'grpc';
 import { from, Observable } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { Permission } from 'src/apis/hts/common/common';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   ping(): boolean {
     return true;
@@ -105,5 +105,45 @@ export class AccountService {
     return from(this.userRepository.update({ id: user.id }, user)).pipe(
       switchMap((_) => from(this.userRepository.findOne(user.id))),
     );
+  }
+
+  getPermissionsFromRole(role: Role): Permission[] {
+    switch (role) {
+      case Role.ORGANIZATION_OWNER:
+        return [
+          Permission.ORGANIZATION_UPDATE,
+          Permission.ORGANIZATION_REMOVE,
+          Permission.ORGANIZATION_MEMBER_ADD,
+          Permission.ORGANIZATION_MEMBER_REMOVE,
+          Permission.TAG_CREATE,
+          Permission.TAG_REMOVE,
+          Permission.EVENT_CREATE,
+          Permission.EVENT_UPDATE,
+          Permission.EVENT_REMOVE,
+          Permission.EVENT_TAG_UPDATE,
+          Permission.FACILITY_CREATE,
+          Permission.FACILITY_UPDATE,
+          Permission.FACILITY_REMOVE,
+        ];
+      case Role.ORGANIZATION_EDITOR:
+        return [
+          Permission.ORGANIZATION_UPDATE,
+          Permission.ORGANIZATION_MEMBER_ADD,
+          Permission.ORGANIZATION_MEMBER_REMOVE,
+          Permission.TAG_CREATE,
+          Permission.TAG_REMOVE,
+          Permission.EVENT_CREATE,
+          Permission.EVENT_UPDATE,
+          Permission.EVENT_REMOVE,
+          Permission.EVENT_TAG_UPDATE,
+          Permission.FACILITY_CREATE,
+          Permission.FACILITY_UPDATE,
+          Permission.FACILITY_REMOVE,
+        ];
+      case Role.ORGANIZATION_MEMBER:
+        return [Permission.EVENT_CREATE, Permission.EVENT_UPDATE, Permission.EVENT_REMOVE, Permission.EVENT_TAG_UPDATE];
+      default:
+        return [];
+    }
   }
 }
