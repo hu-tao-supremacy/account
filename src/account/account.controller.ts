@@ -2,6 +2,7 @@ import { Controller, Request, Get, Param } from '@nestjs/common';
 import {
   AccountServiceController,
   AccountServiceControllerMethods,
+  AssignRoleRequest,
   GenerateAccessTokenRequest,
   GenerateAccessTokenResponse,
   GetUserByChulaIdRequest,
@@ -15,7 +16,6 @@ import { GetObjectByIdRequest, User as UserInterchangeFormat } from '@interchang
 import { CreateUserRequest } from '@interchange-format/account/service';
 import { RpcException } from '@nestjs/microservices';
 import { status } from 'grpc';
-import jwt from 'jsonwebtoken';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserAdapter } from '@adapters/user.adapter';
@@ -126,5 +126,13 @@ export class AccountController implements AccountServiceController {
     return this.accountService
       .getUserById(Number(id.toString()))
       .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+  }
+
+  assignRole({ userId, organizationId, role }: AssignRoleRequest): Observable<BoolValue> {
+    return this.accountService.assignRole(userId, organizationId, role).pipe(map((data) => ({ value: data })));
+  }
+
+  removeRole({ userId, organizationId, role }: AssignRoleRequest): Observable<BoolValue> {
+    return this.accountService.removeRole(userId, organizationId, role).pipe(map((data) => ({ value: data })));
   }
 }
