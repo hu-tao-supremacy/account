@@ -21,7 +21,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermission: Repository<UserPermission>,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   ping(): boolean {
     return true;
@@ -91,8 +91,17 @@ export class AccountService {
     );
   }
 
+  getUserByEmail(email: string): Observable<User> {
+    return from(this.userRepository.findOneOrFail({ email })).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for email ${email}.` });
+      }),
+    );
+  }
+
   updateUser(user: User): Observable<User> {
-    user.didSetup = true
+    user.didSetup = true;
     return from(this.userRepository.update({ id: user.id }, user)).pipe(
       switchMap((_) => from(this.userRepository.findOne(user.id))),
     );
