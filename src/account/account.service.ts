@@ -166,6 +166,25 @@ export class AccountService {
     );
   }
 
+  removePermissions(userOrganizationId: number, permissions: Permission[]): Observable<boolean> {
+    return from(
+      this.userPermissionRepository.remove(
+        permissions.map((permission) => {
+          const userPermission = new UserPermission();
+          userPermission.userOrganizationId = userOrganizationId;
+          userPermission.permissionName = permission;
+          return userPermission;
+        }),
+      ),
+    ).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({ code: status.INTERNAL });
+      }),
+      map((_) => true),
+    );
+  }
+
   assignRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
     return from(this.userOrganizationRepository.findOneOrFail({ userId, organizationId })).pipe(
       catchError((error) => {
@@ -177,6 +196,20 @@ export class AccountService {
       }),
       map((userOrg) => userOrg.id),
       switchMap((userOrgId) => this.assignPermissions(userOrgId, this.getPermissionsFromRole(role))),
+    );
+  }
+
+  removeRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
+    return from(this.userOrganizationRepository.findOneOrFail({ userId, organizationId })).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({
+          code: status.NOT_FOUND,
+          message: `Did not find any user_organization for (user ID: ${userId}, organization ID: ${organizationId}).`,
+        });
+      }),
+      map((userOrg) => userOrg.id),
+      switchMap((userOrgId) => this.removePermissions(userOrgId, this.getPermissionsFromRole(role))),
     );
   }
 }
