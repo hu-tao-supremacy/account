@@ -113,6 +113,13 @@ export class AccountService {
   updateUser(user: User): Observable<User> {
     user.didSetup = true;
     return from(this.userRepository.update({ id: user.id }, user)).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({
+          code: status.ALREADY_EXISTS,
+          message: 'This credential is already associated with a different user account.',
+        });
+      }),
       switchMap((_) => from(this.userRepository.findOne(user.id))),
     );
   }
