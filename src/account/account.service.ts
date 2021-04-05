@@ -33,9 +33,16 @@ export class AccountService {
     permissionName: Permission,
   ): Observable<boolean> {
     return from(
-      this.userOrganizationRepository.findOne({ where: { userId, organizationId }, relations: ['permissions'] }),
+      this.userOrganizationRepository.findOneOrFail({ where: { userId, organizationId }, relations: ['permissions'] }),
     ).pipe(
-      tap((userOrg) => console.log(userOrg, permissionName)),
+      catchError((error) => {
+        console.log(error);
+        throw new RpcException({
+          code: status.NOT_FOUND,
+          message:
+            "This user's credential isn't valid for this operation. This can happen if the user isn't for the operation associated with this organizationId.",
+        });
+      }),
       map((userOrg) => userOrg.permissions),
       map((permissions) => permissions.findIndex((permission) => permission.permissionName == permissionName) !== -1),
     );
@@ -77,7 +84,10 @@ export class AccountService {
     return from(this.userRepository.save(user)).pipe(
       catchError((error) => {
         console.log(error);
-        throw new RpcException({ code: status.INTERNAL });
+        throw new RpcException({
+          code: status.ALREADY_EXISTS,
+          message: 'This credential is already associated with a different user account.',
+        });
       }),
     );
   }
