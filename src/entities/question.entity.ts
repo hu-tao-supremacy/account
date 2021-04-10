@@ -1,13 +1,7 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { QuestionGroup } from "./question-group.entity";
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { QuestionGroup } from './question-group.entity';
 
-@Index(["questionGroupId", "seq"], { unique: true })
+@Index(['questionGroupId', 'seq'], { unique: true })
 @Entity()
 export class Question {
   @PrimaryGeneratedColumn()
@@ -16,13 +10,13 @@ export class Question {
   @Column()
   questionGroupId: number;
 
-  @ManyToOne(() => QuestionGroup, { onDelete: "CASCADE" })
+  @ManyToOne(() => QuestionGroup, { onDelete: 'CASCADE' })
   questionGroup: QuestionGroup;
 
   @Column()
   seq: number;
 
-  @Column("enum", { enum: ["SCALE", "TEXT"] })
+  @Column('enum', { enum: ['SCALE', 'TEXT'] })
   answerType: string;
 
   @Column({ default: false })

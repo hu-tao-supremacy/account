@@ -25,7 +25,6 @@ import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from '@gql/account/service';
 import { isLong } from 'long';
-import { User } from '@entities/user.entity';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -139,10 +138,9 @@ export class AccountController implements AccountServiceController {
   }
 
   updateUserInterests({ userId, tagIds }: UpdateUserInterestsRequest): Observable<UserInterchangeFormat> {
-    return from(this.accountService.updateUserInterests(userId, tagIds))
-              .pipe(
-                switchMap(_ => this.accountService.getUserById(userId)),
-                map((user) => new UserAdapter().toInterchangeFormat(user))
-              )
+    return from(this.accountService.updateUserInterests(userId, tagIds)).pipe(
+      switchMap((_) => this.accountService.getUserById(userId)),
+      map((user) => new UserAdapter().toInterchangeFormat(user)),
+    );
   }
 }

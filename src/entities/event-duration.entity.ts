@@ -1,13 +1,7 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Event } from "./event.entity";
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
 
-@Index(["eventId", "start", "finish"], { unique: true })
+@Index(['eventId', 'start', 'finish'], { unique: true })
 @Entity()
 export class EventDuration {
   @PrimaryGeneratedColumn()
@@ -16,12 +10,12 @@ export class EventDuration {
   @Column()
   eventId: number;
 
-  @Column("timestamptz")
+  @Column('timestamptz')
   start: string;
 
-  @Column("timestamptz")
+  @Column('timestamptz')
   finish: string;
 
-  @ManyToOne(() => Event, { onDelete: "CASCADE" })
+  @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   event: Event;
 }

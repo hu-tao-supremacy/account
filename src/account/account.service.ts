@@ -227,25 +227,24 @@ export class AccountService {
 
   async updateUserInterests(userId: number, tagIds: number[]): Promise<boolean> {
     try {
-      const user = await this.userRepository.findOneOrFail({ id: userId })
-      const previousInterests = await this.userInterestRepository.find({ userId: user.id })
+      const user = await this.userRepository.findOneOrFail({ id: userId });
+      const previousInterests = await this.userInterestRepository.find({ userId: user.id });
       const newInterests = tagIds.map((tagId) => {
-        const userInterest = new UserInterest()
+        const userInterest = new UserInterest();
         userInterest.userId = user.id;
-        userInterest.tagId = tagId
-        return userInterest
-      })
+        userInterest.tagId = tagId;
+        return userInterest;
+      });
 
       await getManager().transaction(async (transactionEntityManager) => {
-        await transactionEntityManager.remove(previousInterests)
-        await transactionEntityManager.save(newInterests)
-      })
+        await transactionEntityManager.remove(previousInterests);
+        await transactionEntityManager.save(newInterests);
+      });
 
-      return true
-    } catch(error) {
-      console.log(error)
+      return true;
+    } catch (error) {
+      console.log(error);
       throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for ID ${userId}.` });
     }
-    
   }
 }

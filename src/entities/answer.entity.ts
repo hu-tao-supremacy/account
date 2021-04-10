@@ -1,14 +1,8 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Question } from "./question.entity";
-import { UserEvent } from "./user-event.entity";
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Question } from './question.entity';
+import { UserEvent } from './user-event.entity';
 
-@Index(["userEventId", "questionId"], { unique: true })
+@Index(['userEventId', 'questionId'], { unique: true })
 @Entity()
 export class Answer {
   @PrimaryGeneratedColumn()
@@ -23,9 +17,9 @@ export class Answer {
   @Column()
   value: string;
 
-  @ManyToOne(() => UserEvent, { onDelete: "CASCADE" })
+  @ManyToOne(() => UserEvent, { onDelete: 'CASCADE' })
   userEvent: UserEvent;
 
-  @ManyToOne(() => Question, { onDelete: "CASCADE" })
+  @ManyToOne(() => Question, { onDelete: 'CASCADE' })
   question: Question;
 }

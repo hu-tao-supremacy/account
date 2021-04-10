@@ -1,15 +1,9 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Event } from "./event.entity";
-import { User } from "./user.entity";
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
+import { User } from './user.entity';
 
-@Index(["userId", "eventId"], { unique: true })
-@Index(["eventId", "ticket"], { unique: true })
+@Index(['userId', 'eventId'], { unique: true })
+@Index(['eventId', 'ticket'], { unique: true })
 @Entity()
 export class UserEvent {
   @PrimaryGeneratedColumn()
@@ -18,13 +12,13 @@ export class UserEvent {
   @Column()
   userId: number;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   user: User;
 
   @Column()
   eventId: number;
 
-  @ManyToOne(() => Event, { onDelete: "CASCADE" })
+  @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   event: Event;
 
   @Column({ nullable: true })
@@ -33,6 +27,6 @@ export class UserEvent {
   @Column({ nullable: true })
   ticket?: string;
 
-  @Column("enum", { enum: ["PENDING", "APPROVED", "REJECTED"] })
+  @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: string;
 }

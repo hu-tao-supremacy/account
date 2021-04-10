@@ -1,18 +1,9 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Location } from "./location.entity";
-import { Organization } from "./organization.entity";
-import { QuestionGroup } from "./question-group.entity";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Location } from './location.entity';
+import { Organization } from './organization.entity';
+import { QuestionGroup } from './question-group.entity';
 
-@Index(["organizationId", "name"], { unique: true })
+@Index(['organizationId', 'name'], { unique: true })
 @Entity()
 export class Event {
   @PrimaryGeneratedColumn()
@@ -21,7 +12,7 @@ export class Event {
   @Column()
   organizationId: number;
 
-  @ManyToOne(() => Organization, { onDelete: "CASCADE" })
+  @ManyToOne(() => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
 
   @Column({ nullable: true })

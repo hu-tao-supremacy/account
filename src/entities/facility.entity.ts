@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Organization } from "./organization.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Organization } from './organization.entity';
 
 @Entity()
 export class Facility {
@@ -9,7 +9,7 @@ export class Facility {
   @Column()
   organizationId: number;
 
-  @ManyToOne(() => Organization, { onDelete: "CASCADE" })
+  @ManyToOne(() => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
 
   @Column({ unique: true })
@@ -21,7 +21,7 @@ export class Facility {
   @Column()
   longitude: number;
 
-  @Column("json")
+  @Column('json')
   operatingHours: string;
 
   @Column()

@@ -1,15 +1,8 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Event } from "./event.entity";
-import { Question } from "./question.entity";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
+import { Question } from './question.entity';
 
-@Index(["eventId", "type", "seq"], { unique: true })
+@Index(['eventId', 'type', 'seq'], { unique: true })
 @Entity()
 export class QuestionGroup {
   @PrimaryGeneratedColumn()
@@ -18,10 +11,10 @@ export class QuestionGroup {
   @Column()
   eventId: number;
 
-  @ManyToOne(() => Event, { onDelete: "CASCADE" })
+  @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   event: Event;
 
-  @Column("enum", { enum: ["PRE_EVENT", "POST_EVENT"] })
+  @Column('enum', { enum: ['PRE_EVENT', 'POST_EVENT'] })
   type: string;
 
   @Column()
