@@ -1,4 +1,5 @@
 import { Organization } from '@entities/organization.entity';
+import { UserInterest } from '@entities/user-interest.entity';
 import { UserOrganization } from '@entities/user-organization.entity';
 import { UserPermission } from '@entities/user-permission.entity';
 import { User } from '@entities/user.entity';
@@ -11,7 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { status } from 'grpc';
 import { from, Observable } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 
 @Injectable()
 export class AccountService {
@@ -20,6 +21,7 @@ export class AccountService {
     @InjectRepository(Organization) private organizationRepository: Repository<Organization>,
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermissionRepository: Repository<UserPermission>,
+    @InjectRepository(UserInterest) private userInterestRepository: Repository<UserInterest>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -221,5 +223,29 @@ export class AccountService {
       map((userOrg) => userOrg.id),
       switchMap((userOrgId) => this.removePermissions(userOrgId, this.getPermissionsFromRole(role))),
     );
+  }
+
+  async updateUserInterests(userId: number, tagIds: number[]): Promise<boolean> {
+    try {
+      const user = await this.userRepository.findOneOrFail({ id: userId })
+      const previousInterests = await this.userInterestRepository.find({ userId: user.id })
+      const newInterests = tagIds.map((tagId) => {
+        const userInterest = new UserInterest()
+        userInterest.userId = user.id;
+        userInterest.tagId = tagId
+        return userInterest
+      })
+
+      await getManager().transaction(async (transactionEntityManager) => {
+        await transactionEntityManager.remove(previousInterests)
+        await transactionEntityManager.save(newInterests)
+      })
+
+      return true
+    } catch(error) {
+      console.log(error)
+      throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for ID ${userId}.` });
+    }
+    
   }
 }

@@ -1,4 +1,5 @@
 import { Organization } from '@entities/organization.entity';
+import { UserInterest } from '@entities/user-interest.entity';
 import { UserOrganization } from '@entities/user-organization.entity';
 import { UserPermission } from '@entities/user-permission.entity';
 import { User } from '@entities/user.entity';
@@ -17,7 +18,7 @@ console.log(
     JwtModule.register({
       secret: process.env.JWT_SECRET,
     }),
-    TypeOrmModule.forFeature([User, Organization, UserOrganization, UserPermission]),
+    TypeOrmModule.forFeature([User, Organization, UserOrganization, UserPermission, UserInterest]),
   ],
   controllers: [AccountController],
   providers: [AccountService],

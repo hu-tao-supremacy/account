@@ -9,6 +9,7 @@ import {
   GetUserByEmailRequest,
   HasPermissionRequest,
   IsAuthenticatedRequest,
+  UpdateUserInterestsRequest,
 } from '@interchange-format/account/service';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
@@ -16,14 +17,15 @@ import { GetObjectByIdRequest, User as UserInterchangeFormat } from '@interchang
 import { CreateUserRequest } from '@interchange-format/account/service';
 import { RpcException } from '@nestjs/microservices';
 import { status } from 'grpc';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { UserAdapter } from '@adapters/user.adapter';
 import { Permission } from '@gql/common/common';
 import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from '@gql/account/service';
 import { isLong } from 'long';
+import { User } from '@entities/user.entity';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -134,5 +136,13 @@ export class AccountController implements AccountServiceController {
 
   removeRole({ userId, organizationId, role }: AssignRoleRequest): Observable<BoolValue> {
     return this.accountService.removeRole(userId, organizationId, role).pipe(map((data) => ({ value: data })));
+  }
+
+  updateUserInterests({ userId, tagIds }: UpdateUserInterestsRequest): Observable<UserInterchangeFormat> {
+    return from(this.accountService.updateUserInterests(userId, tagIds))
+              .pipe(
+                switchMap(_ => this.accountService.getUserById(userId)),
+                map((user) => new UserAdapter().toInterchangeFormat(user))
+              )
   }
 }
