@@ -3,5 +3,5 @@ import { User as UserInterchangeFormat } from '@interchange-format/common/common
 import { User } from '@entities/user.entity';
 
 export class UserAdapter extends BaseAdapter<UserInterchangeFormat, User> {
-  optionalFields = ['district', "province", "zipCode", "phoneNumber", 'nickname', 'chulaId', 'address', 'profilePictureUrl'];
+  optionalFields = ['academicYear', 'district', "province", "zipCode", "phoneNumber", 'nickname', 'chulaId', 'address', 'profilePictureUrl'];
 }
