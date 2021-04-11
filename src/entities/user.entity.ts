@@ -39,6 +39,9 @@ export class User {
   @Column({ nullable: true })
   profilePictureUrl?: string;
 
+  @Column({ nullable: true })
+  academicYear?: number;
+
   @Column()
   isChulaStudent: boolean;
 
