@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, Entity, Index } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';
 
 @Entity()
 export class User {
@@ -17,7 +17,7 @@ export class User {
   @Column({ nullable: true })
   nickname?: string;
 
-  @Index({ unique: true, where: "chula_id IS NOT NULL" })
+  @Index({ unique: true, where: 'chula_id IS NOT NULL' })
   @Column({ nullable: true })
   chulaId?: string;
 
@@ -48,6 +48,6 @@ export class User {
   @Column({ default: false })
   didSetup: boolean = false;
 
-  @Column("enum", { enum: ['__RESERVED__', "M", "F", "NS"] })
+  @Column('enum', { enum: ['__RESERVED__', 'M', 'F', 'NS'] })
   gender: string;
 }
