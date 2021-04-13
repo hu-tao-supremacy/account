@@ -25,6 +25,7 @@ import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from '@gql/account/service';
 import { isLong } from 'long';
+import { UserOrganization } from '@entities/user-organization.entity';
 
 @Controller('account')
 @AccountServiceControllerMethods()
@@ -142,5 +143,17 @@ export class AccountController implements AccountServiceController {
       switchMap((_) => this.accountService.getUserById(userId)),
       map((user) => new UserAdapter().toInterchangeFormat(user)),
     );
+  }
+
+  getUserOrganizationsByOrganizationId({ id }: GetObjectByIdRequest): Observable<UserOrganization[]> {
+    return this.accountService.getUserOrgsByOrgId(id).pipe(
+      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toInterchangeFormat(userOrg)))
+    )
+  }
+
+  getUserOrganizationsByUserId({ id }: GetObjectByIdRequest): Observable<UserOrganization[]> {
+    return this.accountService.getUserOrgsByUserId(id).pipe(
+      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toInterchangeFormat(userOrg)))
+    )
   }
 }

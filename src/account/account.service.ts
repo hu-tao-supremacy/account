@@ -94,6 +94,14 @@ export class AccountService {
     );
   }
 
+  getUserOrgsByUserId(id: number): Observable<UserOrganization[]> {
+    return from(this.userOrganizationRepository.find({ userId: id }));
+  }
+
+  getUserOrgsByOrgId(id: number): Observable<UserOrganization[]> {
+    return from(this.userOrganizationRepository.find({ organizationId: id }));
+  }
+
   getUserById(id: number): Observable<User> {
     return from(this.userRepository.findOneOrFail(id)).pipe(
       catchError((error) => {
