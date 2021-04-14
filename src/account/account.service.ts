@@ -266,6 +266,8 @@ export class AccountService {
         const userEvent = new UserEvent();
         userEvent.userId = userId;
         userEvent.eventId = eventId;
+        userEvent.isInternal = true;
+        userEvent.status = 'APPROVED';
         return userEvent;
       });
 
