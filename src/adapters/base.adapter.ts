@@ -1,7 +1,7 @@
 import { mapKeys, mapValues } from 'lodash';
 
 export class BaseAdapter<InterchangeFormat extends object, Entity extends object> {
-  optionalFields: string[];
+  optionalFields: string[] = [];
 
   wrapperToOptional(field: any) {
     return field?.value;
