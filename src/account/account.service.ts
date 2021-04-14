@@ -1,4 +1,5 @@
 import { Organization } from '@entities/organization.entity';
+import { UserEvent } from '@entities/user-event.entity';
 import { UserInterest } from '@entities/user-interest.entity';
 import { UserOrganization } from '@entities/user-organization.entity';
 import { UserPermission } from '@entities/user-permission.entity';
@@ -22,6 +23,7 @@ export class AccountService {
     @InjectRepository(UserOrganization) private userOrganizationRepository: Repository<UserOrganization>,
     @InjectRepository(UserPermission) private userPermissionRepository: Repository<UserPermission>,
     @InjectRepository(UserInterest) private userInterestRepository: Repository<UserInterest>,
+    @InjectRepository(UserEvent) private userEventRepository: Repository<UserEvent>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -233,7 +235,7 @@ export class AccountService {
     );
   }
 
-  async updateUserInterests(userId: number, tagIds: number[]): Promise<boolean> {
+  async setInterestedTags(userId: number, tagIds: number[]): Promise<boolean> {
     try {
       const user = await this.userRepository.findOneOrFail({ id: userId });
       const previousInterests = await this.userInterestRepository.find({ userId: user.id });
@@ -242,6 +244,29 @@ export class AccountService {
         userInterest.userId = user.id;
         userInterest.tagId = tagId;
         return userInterest;
+      });
+
+      await getManager().transaction(async (transactionEntityManager) => {
+        await transactionEntityManager.remove(previousInterests);
+        await transactionEntityManager.save(newInterests);
+      });
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      throw new RpcException({ code: status.NOT_FOUND, message: `Did not find any user for ID ${userId}.` });
+    }
+  }
+
+  async setInterestedEvents(userId: number, eventIds: number[]): Promise<boolean> {
+    try {
+      const user = await this.userRepository.findOneOrFail({ id: userId });
+      const previousInterests = await this.userEventRepository.find({ userId: user.id, isInternal: true });
+      const newInterests = eventIds.map((eventId) => {
+        const userEvent = new UserEvent();
+        userEvent.userId = userId;
+        userEvent.eventId = eventId;
+        return userEvent;
       });
 
       await getManager().transaction(async (transactionEntityManager) => {

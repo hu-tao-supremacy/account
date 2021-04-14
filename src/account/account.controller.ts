@@ -11,7 +11,8 @@ import {
   GetUserOrganizationsByUserIdResponse,
   HasPermissionRequest,
   IsAuthenticatedRequest,
-  UpdateUserInterestsRequest,
+  SetInterestedEventsRequest,
+  SetInterestedTagsRequest,
 } from '@interchange-format/account/service';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
@@ -140,8 +141,15 @@ export class AccountController implements AccountServiceController {
     return this.accountService.removeRole(userId, organizationId, role).pipe(map((data) => ({ value: data })));
   }
 
-  updateUserInterests({ userId, tagIds }: UpdateUserInterestsRequest): Observable<UserInterchangeFormat> {
-    return from(this.accountService.updateUserInterests(userId, tagIds)).pipe(
+  setInterestedTags({ userId, tagIds }: SetInterestedTagsRequest): Observable<UserInterchangeFormat> {
+    return from(this.accountService.setInterestedTags(userId, tagIds)).pipe(
+      switchMap((_) => this.accountService.getUserById(userId)),
+      map((user) => new UserAdapter().toInterchangeFormat(user)),
+    );
+  }
+
+  setInterestedEvents({ userId, eventIds }: SetInterestedEventsRequest): Observable<UserInterchangeFormat> {
+    return from(this.accountService.setInterestedEvents(userId, eventIds)).pipe(
       switchMap((_) => this.accountService.getUserById(userId)),
       map((user) => new UserAdapter().toInterchangeFormat(user)),
     );
