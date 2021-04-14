@@ -10,6 +10,11 @@ import { UserPermission } from '@entities/user-permission.entity';
 import { UserInterest } from '@entities/user-interest.entity';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Tag } from '@entities/tag.entity';
+import { UserEvent } from '@entities/user-event.entity';
+import { QuestionGroup } from '@entities/question-group.entity';
+import { Question } from '@entities/question.entity';
+import { Event } from '@entities/event.entity';
+import { Location } from '@entities/location.entity';
 
 @Module({
   imports: [
@@ -20,7 +25,19 @@ import { Tag } from '@entities/tag.entity';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User, Organization, UserOrganization, UserPermission, Tag, UserInterest],
+      entities: [
+        User,
+        Organization,
+        UserOrganization,
+        UserPermission,
+        Tag,
+        UserInterest,
+        UserEvent,
+        Question,
+        QuestionGroup,
+        Event,
+        Location,
+      ],
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),
     }),
