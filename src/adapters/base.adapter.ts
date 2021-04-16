@@ -1,25 +1,11 @@
-import { mapKeys, mapValues } from 'lodash';
-
-export class BaseAdapter<InterchangeFormat extends object, Entity extends object> {
-  optionalFields: string[] = [];
-
-  wrapperToOptional(field: any) {
-    return field?.value;
+export class BaseAdapter<API extends object, Entity extends object> {
+  toEntity(object: any): Entity {
+    // @ts-ignore
+    return mapValues(API.fromJSON(object), (item: any) => item?.value ?? item) as Entity;
   }
 
-  optionalToWrapper(field: any) {
-    return { value: field };
-  }
-
-  toEntity(object: InterchangeFormat): Entity {
-    return mapValues(object, (value, key) =>
-      this.optionalFields.includes(key) ? this.wrapperToOptional(value) : value,
-    ) as Entity;
-  }
-
-  toInterchangeFormat(object: Entity): InterchangeFormat {
-    return mapValues(object, (value, key) =>
-      this.optionalFields.includes(key) ? this.optionalToWrapper(value) : value,
-    ) as InterchangeFormat;
+  toAPI(object: any): API {
+    // @ts-ignore
+    return API.toJSON(object) as API;
   }
 }

@@ -1,22 +1,5 @@
-import { Organization } from '@entities/organization.entity';
-import { Organization as OrganizationInterchangeFormat } from '@interchange-format/common/common';
+import { Organization as Entity } from '@entities/organization.entity';
+import { Organization as API } from '@api/common/common';
 import { BaseAdapter } from './base.adapter';
 
-export class OrganizationAdapter extends BaseAdapter<OrganizationInterchangeFormat, Organization> {
-  optionalFields = [
-    'abbreviation',
-    'advisor',
-    'associatedFaculty',
-    'description',
-    'facebookPage',
-    'instagram',
-    'lineOfficialAccount',
-    'email',
-    'contactFullName',
-    'contactEmail',
-    'contactPhoneNumber',
-    'contactLineId',
-    'profilePictureUrl',
-    'profilePictureHash',
-  ];
-}
+export class OrganizationAdapter extends BaseAdapter<API, Entity> {}
