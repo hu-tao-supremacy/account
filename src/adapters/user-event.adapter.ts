@@ -1,7 +1,9 @@
 import { BaseAdapter } from './base.adapter';
-import { UserEvent as UserEventIF } from '@interchange-format/common/common';
-import { UserEvent } from '@entities/user-event.entity';
+import { UserEvent as API } from '@api/common/common';
+import { UserEvent as Entity } from '@entities/user-event.entity';
 
-export class UserEventAdapter extends BaseAdapter<UserEventIF, UserEvent> {
-  optionalFields = ['rating', 'ticket', 'isInternal'];
+export class UserEventAdapter extends BaseAdapter<API, Entity> {
+  constructor() {
+    super(API);
+  }
 }

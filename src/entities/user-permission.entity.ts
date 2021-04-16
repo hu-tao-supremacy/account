@@ -1,4 +1,4 @@
-import { Permission } from '@gql/common/common';
+import { Permission } from '@api/common/common';
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserOrganization } from './user-organization.entity';
 
