@@ -13,20 +13,19 @@ import {
   IsAuthenticatedRequest,
   SetInterestedEventsRequest,
   SetInterestedTagsRequest,
-} from '@interchange-format/account/service';
+  CreateUserRequest,
+  AccessTokenPayload,
+} from '@api/account/service';
+import { Permission, GetObjectByIdRequest, User as UserInterchangeFormat } from '@api/common/common';
 import { AccountService } from './account.service';
 import { BoolValue } from '@google/wrappers';
-import { GetObjectByIdRequest, User as UserInterchangeFormat, UserOrganization as UserOrganizationInterchangeFormat } from '@interchange-format/common/common';
-import { CreateUserRequest } from '@interchange-format/account/service';
 import { RpcException } from '@nestjs/microservices';
 import { status } from 'grpc';
 import { from, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { UserAdapter } from '@adapters/user.adapter';
-import { Permission } from '@gql/common/common';
 import { Request as ExpressRequest } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenPayload } from '@gql/account/service';
 import { isLong } from 'long';
 import { UserOrganizationAdapter } from '@adapters/user-organization.adapter';
 
@@ -155,17 +154,19 @@ export class AccountController implements AccountServiceController {
     );
   }
 
-  getUserOrganizationsByOrganizationId({ id }: GetObjectByIdRequest): Observable<GetUserOrganizationsByOrganizationIdResponse> {
+  getUserOrganizationsByOrganizationId({
+    id,
+  }: GetObjectByIdRequest): Observable<GetUserOrganizationsByOrganizationIdResponse> {
     return this.accountService.getUserOrgsByOrgId(id).pipe(
-      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
-      map(userOrgs => ({ userOrganizations: userOrgs }))
-    )
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
+      map((userOrgs) => ({ userOrganizations: userOrgs })),
+    );
   }
 
   getUserOrganizationsByUserId({ id }: GetObjectByIdRequest): Observable<GetUserOrganizationsByUserIdResponse> {
     return this.accountService.getUserOrgsByUserId(id).pipe(
-      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
-      map(userOrgs => ({ userOrganizations: userOrgs }))
-    )
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
+      map((userOrgs) => ({ userOrganizations: userOrgs })),
+    );
   }
 }
