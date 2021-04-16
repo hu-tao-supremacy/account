@@ -48,7 +48,7 @@ export class AccountController implements AccountServiceController {
 
   updateAccountInfo(user: UserInterchangeFormat): Observable<UserInterchangeFormat> {
     const userEntity = new UserAdapter().toEntity(user);
-    return this.accountService.updateUser(userEntity).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService.updateUser(userEntity).pipe(map((user) => new UserAdapter().toAPI(user)));
   }
 
   generateAccessToken({ userId }: GenerateAccessTokenRequest): GenerateAccessTokenResponse {
@@ -113,23 +113,21 @@ export class AccountController implements AccountServiceController {
   }
 
   getUserByChulaId({ id }: GetUserByChulaIdRequest): Observable<UserInterchangeFormat> {
-    return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService.getUserByChulaId(id).pipe(map((user) => new UserAdapter().toAPI(user)));
   }
 
   getUserByEmail({ email }: GetUserByEmailRequest): Observable<UserInterchangeFormat> {
-    return this.accountService.getUserByEmail(email).pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService.getUserByEmail(email).pipe(map((user) => new UserAdapter().toAPI(user)));
   }
 
   createUser(request: CreateUserRequest): Observable<UserInterchangeFormat> {
     return this.accountService
       .createUser(request.firstName, request.lastName, request.chulaId, request.email, request.isChulaStudent)
-      .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+      .pipe(map((user) => new UserAdapter().toAPI(user)));
   }
 
   getUserById({ id }: GetObjectByIdRequest): Observable<UserInterchangeFormat> {
-    return this.accountService
-      .getUserById(Number(id.toString()))
-      .pipe(map((user) => new UserAdapter().toInterchangeFormat(user)));
+    return this.accountService.getUserById(Number(id.toString())).pipe(map((user) => new UserAdapter().toAPI(user)));
   }
 
   assignRole({ userId, organizationId, role }: AssignRoleRequest): Observable<BoolValue> {
@@ -143,14 +141,14 @@ export class AccountController implements AccountServiceController {
   setInterestedTags({ userId, tagIds }: SetInterestedTagsRequest): Observable<UserInterchangeFormat> {
     return from(this.accountService.setInterestedTags(userId, tagIds)).pipe(
       switchMap((_) => this.accountService.getUserById(userId)),
-      map((user) => new UserAdapter().toInterchangeFormat(user)),
+      map((user) => new UserAdapter().toAPI(user)),
     );
   }
 
   setInterestedEvents({ userId, eventIds }: SetInterestedEventsRequest): Observable<UserInterchangeFormat> {
     return from(this.accountService.setInterestedEvents(userId, eventIds)).pipe(
       switchMap((_) => this.accountService.getUserById(userId)),
-      map((user) => new UserAdapter().toInterchangeFormat(user)),
+      map((user) => new UserAdapter().toAPI(user)),
     );
   }
 
@@ -158,14 +156,14 @@ export class AccountController implements AccountServiceController {
     id,
   }: GetObjectByIdRequest): Observable<GetUserOrganizationsByOrganizationIdResponse> {
     return this.accountService.getUserOrgsByOrgId(id).pipe(
-      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toAPI(userOrg))),
       map((userOrgs) => ({ userOrganizations: userOrgs })),
     );
   }
 
   getUserOrganizationsByUserId({ id }: GetObjectByIdRequest): Observable<GetUserOrganizationsByUserIdResponse> {
     return this.accountService.getUserOrgsByUserId(id).pipe(
-      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toInterchangeFormat(userOrg))),
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toAPI(userOrg))),
       map((userOrgs) => ({ userOrganizations: userOrgs })),
     );
   }
