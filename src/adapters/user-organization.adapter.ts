@@ -1,9 +1,5 @@
-import { BaseAdapter } from './base.adapter';
-import { UserOrganization as API } from '@api/common/common';
-import { UserOrganization as Entity } from '@entities/user-organization.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { UserOrganization as IF } from '@onepass/api/common/common';
+import { UserOrganization as E } from '@onepass/entities';
 
-export class UserOrganizationAdapter extends BaseAdapter<API, Entity> {
-  constructor() {
-    super(API);
-  }
-}
+export class UserOrganizationAdapter extends BaseAdapter<IF, E> {}

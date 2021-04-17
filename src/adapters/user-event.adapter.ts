@@ -1,9 +1,7 @@
-import { BaseAdapter } from './base.adapter';
-import { UserEvent as API } from '@api/common/common';
-import { UserEvent as Entity } from '@entities/user-event.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { UserEvent as UserEventIF } from '@onepass/api/common/common';
+import { UserEvent } from '@onepass/entities';
 
-export class UserEventAdapter extends BaseAdapter<API, Entity> {
-  constructor() {
-    super(API);
-  }
+export class UserEventAdapter extends BaseAdapter<UserEventIF, UserEvent> {
+  optionalFields = ['rating', 'ticket'];
 }

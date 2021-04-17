@@ -15,6 +15,7 @@ import { QuestionGroup } from '@entities/question-group.entity';
 import { Question } from '@entities/question.entity';
 import { Event } from '@entities/event.entity';
 import { Location } from '@entities/location.entity';
+import { EventDuration } from './entities';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { Location } from '@entities/location.entity';
         QuestionGroup,
         Event,
         Location,
+        EventDuration,
       ],
       synchronize: false,
       namingStrategy: new SnakeNamingStrategy(),

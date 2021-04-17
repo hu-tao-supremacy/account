@@ -1,9 +1,22 @@
-import { Organization as Entity } from '@entities/organization.entity';
-import { Organization as API } from '@api/common/common';
-import { BaseAdapter } from './base.adapter';
+import { BaseAdapter } from '@onepass/adapters';
+import { Organization as OrganizationIF } from '@onepass/api/common/common';
+import { Organization } from '@onepass/entities';
 
-export class OrganizationAdapter extends BaseAdapter<API, Entity> {
-  constructor() {
-    super(API);
-  }
+export class OrganizationAdapter extends BaseAdapter<OrganizationIF, Organization> {
+  optionalFields = [
+    'abbreviation',
+    'advisor',
+    'associatedFaculty',
+    'description',
+    'facebookPage',
+    'instagram',
+    'lineOfficialAccount',
+    'email',
+    'contactFullName',
+    'contactEmail',
+    'contactPhoneNumber',
+    'contactLineId',
+    'profilePictureUrl',
+    'profilePictureHash',
+  ];
 }

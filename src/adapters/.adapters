@@ -1,0 +1,4 @@
+ADAPTERS=$(curl 'https://api.github.com/repos/hu-tao-supremacy/api-gateway/contents/src/adapters' --silent | jq '.[]' | jq '.download_url' -r)
+for a in $ADAPTERS; do
+  wget $a;
+done

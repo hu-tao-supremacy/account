@@ -12,6 +12,10 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
+      "@onepass/api/*": ["src/apis/hts/*"],
+      "@onepass/graphql/*": ["src/graph/hts/*"],
+      "@onepass/entities": ["src/entities"],
+      "@onepass/adapters": ["src/adapters"],
       "@api/*": ["src/apis/hts/*"],
       "@graph/*": ["src/graph/hts/*"],
       "@google/*": ["src/apis/google/protobuf/*"],
