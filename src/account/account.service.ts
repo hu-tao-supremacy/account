@@ -235,6 +235,13 @@ export class AccountService {
     );
   }
 
+  searchUser(keyword: string): Promise<User[]> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('CONCAT(firstName, lastName, email) LIKE :keyword', { keyword })
+      .getMany();
+  }
+
   async setInterestedTags(userId: number, tagIds: number[]): Promise<boolean> {
     try {
       const user = await this.userRepository.findOneOrFail({ id: userId });
