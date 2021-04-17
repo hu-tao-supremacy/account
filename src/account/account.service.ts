@@ -239,9 +239,10 @@ export class AccountService {
     console.log(keyword);
     const result = await this.userRepository
       .createQueryBuilder('user')
-      .where('LOWER(CONCAT(email, chula_id, first_name, last_name)) LIKE :keyword', {
-        keyword: `%${keyword.toLowerCase()}%`,
-      })
+      .where('email ILIKE :keyword', { keyword: `%${keyword}%` })
+      .orWhere('chula_id ILIKE :keyword', { keyword: `%${keyword}%` })
+      .orWhere('first_name ILIKE :keyword', { keyword: `%${keyword}%` })
+      .orWhere('last_name ILIKE :keyword', { keyword: `%${keyword}%` })
       .limit(25)
       .getMany();
     console.log(result);
