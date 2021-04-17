@@ -82,6 +82,14 @@
     apollo-graphql "^0.6.0"
     lodash.xorby "^4.7.0"
 
+"@apollo/federation@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@apollo/federation/-/federation-0.23.0.tgz#3978c7b182d3e942d9728a6e881fde4b41a19e93"
+  integrity sha512-4ad/DoTom8pl0qY9fzg/FmyOrZdfSCS2LS2HnQBNa1/GoqiSIzzk/QGUYP9acZ6UvfBWA91rzI3MJkwkvUZYBw==
+  dependencies:
+    apollo-graphql "^0.6.0"
+    lodash.xorby "^4.7.0"
+
 "@apollo/gateway@^0.24.4":
   version "0.24.4"
   resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.24.4.tgz#8f5c34346ed6906a798f7fd938555855de3cb9c4"
@@ -97,6 +105,25 @@
     apollo-server-env "^3.0.0"
     apollo-server-errors "^2.4.2"
     apollo-server-types "^0.6.3"
+    loglevel "^1.6.1"
+    make-fetch-happen "^8.0.0"
+    pretty-format "^26.0.0"
+
+"@apollo/gateway@^0.26.1":
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.26.1.tgz#5d11ec02a21d72786fbe09fdf69a1dc6e0f43ac9"
+  integrity sha512-T1Jchduy74Tb5cTI8Lhsy0UuGqMiN6QLhmtSf6oZXUOASl5KHCkpkRvaB1Zis6wFvcuGBSJSrqIJ46oq5GCHtg==
+  dependencies:
+    "@apollo/federation" "^0.23.0"
+    "@apollo/query-planner" "^0.1.1"
+    "@types/node-fetch" "2.5.8"
+    apollo-graphql "^0.6.0"
+    apollo-reporting-protobuf "^0.6.0"
+    apollo-server-caching "^0.6.0"
+    apollo-server-core "^2.21.0"
+    apollo-server-env "^3.0.0"
+    apollo-server-errors "^2.4.2"
+    apollo-server-types "^0.7.0"
     loglevel "^1.6.1"
     make-fetch-happen "^8.0.0"
     pretty-format "^26.0.0"
@@ -131,6 +158,13 @@
   integrity sha512-F12sar1F/7wVaz5D4pmvqbBJ9gdT7iUBpg3wa0MB/ThqM2XRp4nxqWR2Qvh0v8EFLxgEtVR0efMsWVgjJcmeFQ==
   dependencies:
     "@apollo/query-planner-wasm" "^0.2.3"
+    pretty-format "^26.0.0"
+
+"@apollo/query-planner@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-0.1.1.tgz#1d86e5de7b1e52bd6e7b6917a47e20b5393e3718"
+  integrity sha512-nNajPA/hW5AybvK2GikB8Wu38mExc6GJ6WMJ6IBtoLpkbkMcQ/v8rAdlX69ZYBJzI3j52uD1UXHesFS0wCsIUQ==
+  dependencies:
     pretty-format "^26.0.0"
 
 "@apollographql/apollo-tools@^0.4.3":
