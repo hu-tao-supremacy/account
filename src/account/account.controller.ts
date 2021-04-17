@@ -15,6 +15,8 @@ import {
   SetInterestedTagsRequest,
   CreateUserRequest,
   AccessTokenPayload,
+  SearchUserRequest,
+  SearchUserResponse,
 } from '@api/account/service';
 import { Permission, GetObjectByIdRequest, User as UserInterchangeFormat } from '@api/common/common';
 import { AccountService } from './account.service';
@@ -44,6 +46,13 @@ export class AccountController implements AccountServiceController {
         message: `Access token is invalid.`,
       });
     }
+  }
+
+  searchUser({ keyword }: SearchUserRequest): Observable<SearchUserResponse> {
+    return from(this.accountService.searchUser(keyword)).pipe(
+      map((users) => users.map((user) => new UserAdapter().toAPI(user))),
+      map((users) => ({ users })),
+    );
   }
 
   updateAccountInfo(user: UserInterchangeFormat): Observable<UserInterchangeFormat> {
