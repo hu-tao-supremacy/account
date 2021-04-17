@@ -235,11 +235,17 @@ export class AccountService {
     );
   }
 
-  searchUser(keyword: string): Promise<User[]> {
-    return this.userRepository
+  async searchUser(keyword: string): Promise<User[]> {
+    console.log(keyword);
+    const result = await this.userRepository
       .createQueryBuilder('user')
-      .where('CONCAT(email, chula_id, first_name, last_name) LIKE :keyword LIMIT 25', { keyword })
+      .where('LOWER(CONCAT(email, chula_id, first_name, last_name)) LIKE :keyword', {
+        keyword: `%${keyword.toLowerCase()}%`,
+      })
+      .limit(25)
       .getMany();
+    console.log(result);
+    return result;
   }
 
   async setInterestedTags(userId: number, tagIds: number[]): Promise<boolean> {
