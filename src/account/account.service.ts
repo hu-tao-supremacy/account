@@ -238,7 +238,7 @@ export class AccountService {
   searchUser(keyword: string): Promise<User[]> {
     return this.userRepository
       .createQueryBuilder('user')
-      .where('CONCAT(firstName, lastName, email) LIKE :keyword', { keyword })
+      .where('CONCAT(firstName, lastName, email) LIKE :keyword LIMIT 25', { keyword })
       .getMany();
   }
 
