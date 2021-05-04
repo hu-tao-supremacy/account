@@ -124,6 +124,18 @@ export class AccountService {
 
   updateUser(user: User): Observable<User> {
     user.didSetup = true;
+
+    if (user.gender) {
+      switch (user.gender) {
+        case '1':
+          user.gender = 'M';
+        case '2':
+          user.gender = 'F';
+        case '3':
+          user.gender = 'NS';
+      }
+    }
+
     return from(this.userRepository.update({ id: user.id }, user)).pipe(
       catchError((error) => {
         console.log(error);
