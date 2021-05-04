@@ -125,9 +125,14 @@ export class AccountService {
   updateUser(user: User): Observable<User> {
     user.didSetup = true;
 
-    if (user.gender === '1') user.gender = 'M';
-    if (user.gender === '2') user.gender = 'F';
-    if (user.gender === '3') user.gender = 'NS';
+    // @ts-ignore
+    if (user.gender === 1) user.gender = 'M';
+
+    // @ts-ignore
+    if (user.gender === 2) user.gender = 'F';
+
+    // @ts-ignore
+    if (user.gender === 3) user.gender = 'NS';
 
     console.log(user);
 
